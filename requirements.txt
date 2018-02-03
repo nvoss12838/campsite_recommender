@@ -1,0 +1,10 @@
+plotly==2.3.0
+mapbox==0.15.1
+Flask==0.12.2
+mapboxgl==0.1.3
+geopy==1.11.0
+pandas==0.18.1
+geojson==2.3.0
+requests==2.18.4
+numpy==1.14.0
+scikit_learn==0.19.1
