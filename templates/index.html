@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.green {background-color:rgba(0, 255, 0, .3);}
+.blue {background-color:rgba(0, 0, 255, .3);}
+.black {background-color:rgba(0, 0, 0, .3);}
+.bb {color: rgba(255, 255, 255, 1); background-color:rgba(0, 0, 0, .6);}
+.white {background-color:rgba(255, 255, 255,1);}
+.main {
+  background-color: rgba(255, 255, 255, 0.7);
+  margin-top: 50px;
+}
+.move-button {
+  display: flex;
+  justify-content: center;
+}
+body {
+  background-image: url('https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/an-alpine-ski-trail-on-wildcat-mountain-tim-laman.jpg');
+  background-size: 100%
+}
+@media only screen and (max-width: 600px) {
+    body {
+        background-size: auto;
+    }
+}
+
+button {
+            padding: 1vh 2vw;
+            background-color: cornflowerblue;
+            color: white;
+            border-radius: 16px;
+            border-color:white;
+            padding-left: 12px;
+            padding-right: 12px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: rgba(0,0,0,0);
+            color: cornflowerblue;
+            border-color: cornflowerblue;
+            border: 2px solid cornflowerblue;
+        }
+</style>
+
+
+<div class="main" style="padding: 20px 25% 20px 25%;">
+
+  <h3><b>Get recommendations of campsites based on a place you know you like:</b></h3>
+
+<br>
+
+<form action='/campsite_recommendations', method='POST'>
+  <div><h4><b>Step 1: Choose a campsite that you like.</b></h4></div>
+  <select name="state" id="select_state" class="selectpicker form-control">
+      <option selected="selected" value = ''>Select a state...</option>
+      {% for state in df['state'].unique()|sort %}
+      <option value="{{ state }}">{{ state }}</option>
+      {% endfor %}
+  </select>
+<br>
+
+<select name="campsite" id="select_campsite" class="selectpicker form-contro" disabled>
+    <option selected="selected" value = ''>Select a campsite...</option>
+</select>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script charset="utf-8" type="text/javascript">
+    $(function() {
+        var dropdown = {
+            state: $('#select_state'),
+            campsite: $('#select_campsite')
+        };
+        // function to call XHR and update goodsrec dropdown
+        function updateCampsite() {
+            var state = dropdown.state.val();
+            dropdown.campsite.attr('disabled', 'disabled');
+            console.log(state);
+            if (state.length) {
+                dropdown.campsite.empty();
+                $.getJSON("{{ url_for('get_campsites') }}", {state: state}, function(data) {
+                    console.log(data);
+                    data.forEach(function(item) {
+                        dropdown.campsite.append(
+                            $('<option>', {
+                                // style: df['colors'].iloc[item.id]
+                                value: item.name,
+                                text: item.name
+                            })
+                        );
+                    });
+                    dropdown.campsite.removeAttr('disabled');
+                });
+            }
+        }
+        // event listener to customer dropdown change
+dropdown.state.on('change', function() {
+    updateCampsite();
+});
+});
+</script>
+<div><h4><b>Step 2: Where are you going to be located?</b></h4></div>
+Address: <input type="text" name="home"><br>
+
+<br><br>
+<div><h4><b>Step 2: How many miles away are you willing to travel?</b></h4></div>
+
+Distance (miles): <input type="text" name="distance"><br>
+
+
+<br>
+<br>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script charset="utf-8" type="text/javascript">
+</script>
+
+
+
+
+
+<br>
+  <div class='move-button'>
+
+  <button type="submit">Recommend</button>
+
+</div>
+
+<br><br>
+
+</form>
+</form>
+</div>
+
+
+{% endblock %}
