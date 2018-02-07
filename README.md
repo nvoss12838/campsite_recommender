@@ -1,6 +1,6 @@
 # campsite_recommender
 Campsite recomendation
-Campsite recommender is now running on google cloud at <www.campin.site> in a docker container!
+Campsite recommender is now running on google cloud at http://campin.site in a docker container!
 
 Campsite_recommender uses a database of campsites from <https://www.reserveamerica.com/>
 
